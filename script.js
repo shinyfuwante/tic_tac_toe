@@ -8,6 +8,7 @@ const gameController = (() => {
         console.log('in getTurnPlayer');
         return turnPlayer;
     }
+
     const checkBoardState = () => {
         winningSpaces.forEach( (combo) => {
             if (isWin(combo)) {
@@ -92,16 +93,22 @@ const gameBoard = (() => {
 })();
 
 const playerFactory = (name, symbol) => {
-    let marker = symbol;
+    const marker = symbol;
+    const ign = name; 
     const getMarker = () => { 
-        return symbol;
+        return marker;
+    }
+    const getName = () => {
+        return ign;
     }
     return {
-        getMarker
+        getMarker,
+        getName
     };
 
 }
 
-const playerOne = playerFactory('me', 'o');
-const playerTwo = playerFactory('you', 'x');
+const playerOne = playerFactory('me', 'x');
+const playerTwo = playerFactory('you', 'o');
 gameBoard.createBoard();
+gameController.turnChange(playerOne);
