@@ -10,10 +10,6 @@ const gameController = (() => {
         setFirstPlayer(players[0]);
     }
 
-    const getPlayers = () => {
-        players;
-    }
-
     const turnChange = () => {
         if (turnPlayer == players[0]) turnPlayer = players[1];
         else turnPlayer = players[0];
