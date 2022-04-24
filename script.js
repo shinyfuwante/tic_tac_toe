@@ -2,6 +2,7 @@ const gameController = (() => {
     const winningSpaces = [[0,1,2], [0,4,8], [0,3,6], [1,4,7], [2, 5,8], [2,4,6], [3, 4,5], [6,7,8]];
     let players = [];
     let turnPlayer;
+
     const setFirstPlayer = (player) => {
         turnPlayer = player;
     }
@@ -19,13 +20,22 @@ const gameController = (() => {
     }
 
     const checkBoardState = () => {
+        console.log(checkWin());
+        if (checkWin()) {
+            alert('win');
+        } else if (gameBoard.isFull()) {
+            alert('tie');
+        } 
+    }
+
+    const checkWin = () => {
+        let winFound = false;
         winningSpaces.forEach( (combo) => {
             if (isWin(combo)) {
-                console.log('win');
+                winFound = true;
             }
-            return;
         })
-
+        return winFound;
     }
 
     const isWin = (arr) => {
@@ -36,11 +46,17 @@ const gameController = (() => {
             (gameBoard.getBoard(index1) == gameBoard.getBoard(index2)) && 
         (gameBoard.getBoard(index1) == gameBoard.getBoard(index3));
     }
+
     const listener = () => {
         const panels = document.querySelectorAll("div.board-panel");
         panels.forEach(panel => panel.addEventListener('click', panelClick));
     }    
     
+    const disableListeners = () => {
+        const panels = document.querySelectorAll("div.board-panel");
+        panels.forEach(panel => panel.removeEventListener('click', panelClick));
+    }
+
     const panelClick = (e) => {
         const panel = e.target;
         const panelIndex = panel.dataset.index;
@@ -97,26 +113,30 @@ const gameBoard = (() => {
         }
         else return board[index];
     }
-    //todo deal with a full board and tying
+    const isFull = () => {
+        for (let i = 0; i < board.length; i++) {
+            if (board[i] == '') return false;
+        }
+        return true;
+    }
     return {
         clearBoard, 
         createBoard,
         getBoard,
-        placeMarker
+        placeMarker,
+        isFull
     };
 })();
 
-const playerFactory = (name, symbol) => {
+const playerFactory = (symbol) => {
     const marker = () => symbol;
-    const playerName = () => name; 
     return {
-        marker,
-        playerName
+        marker
     };
 
 }
 
-const playerOne = playerFactory('me', 'x');
-const playerTwo = playerFactory('you', 'o');
+const playerOne = playerFactory('x');
+const playerTwo = playerFactory('o');
 gameController.loadPlayers(playerOne, playerTwo);
 gameBoard.createBoard();
