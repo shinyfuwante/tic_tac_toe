@@ -1,11 +1,24 @@
 const gameController = (() => {
     const winningSpaces = [[0,1,2], [0,4,8], [0,3,6], [1,4,7], [2, 5,8], [2,4,6], [3, 4,5], [6,7,8]];
+    const players = [];
     let turnPlayer;
-    const turnChange = (currentPlayer) => {
-        turnPlayer = currentPlayer;
+    const setFirstPlayer = (player) => {
+        turnPlayer = player;
+    }
+    const loadPlayers = (player1, player2) => {
+        players.push(player1, player2);
+        setFirstPlayer(player1);
+    }
+
+    const getPlayers = () => {
+        return players;
+    }
+
+    const turnChange = () => {
+        if (turnPlayer == players[0]) turnPlayer = players[1];
+        else turnPlayer = players[0];
     }
     const getTurnPlayer = () => {
-        console.log('in getTurnPlayer');
         return turnPlayer;
     }
 
@@ -35,15 +48,17 @@ const gameController = (() => {
     const panelClick = (e) => {
         const panel = e.target;
         const panelIndex = panel.dataset.index;
-        gameBoard.placeMarker(panelIndex, 'x');
+        gameBoard.placeMarker(panelIndex, gameController.getTurnPlayer.getMarker());
         checkBoardState();
         listener();
     }
     
     return {
-        turnChange,
+        setFirstPlayer,
         getTurnPlayer,
-        listener
+        listener,
+        loadPlayers,
+        turnChange
     };
 })();
 
@@ -110,5 +125,5 @@ const playerFactory = (name, symbol) => {
 
 const playerOne = playerFactory('me', 'x');
 const playerTwo = playerFactory('you', 'o');
+gameController.loadPlayers(playerOne, playerTwo);
 gameBoard.createBoard();
-gameController.turnChange(playerOne);
