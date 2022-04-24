@@ -91,19 +91,17 @@ const gameBoard = (() => {
     };
 })();
 
-const playerFactory = (name) => {
-    let score = 0;
-    const increaseScore = () => score++;
-    const makeMove = () => console.log("move");
-    const getScore = () => console.log(score);
+const playerFactory = (name, symbol) => {
+    let marker = symbol;
+    const getMarker = () => { 
+        return symbol;
+    }
     return {
-        makeMove, 
-        getScore, 
-        increaseScore
+        getMarker
     };
 
 }
 
-const playerOne = playerFactory('me');
-const playerTwo = playerFactory('you');
+const playerOne = playerFactory('me', 'o');
+const playerTwo = playerFactory('you', 'x');
 gameBoard.createBoard();
