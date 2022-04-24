@@ -1,6 +1,29 @@
+const gameController = (() => {
+    let turnPlayer;
+    const turnChange = (currentPlayer) => {
+        turnPlayer = currentPlayer;
+    }
+    const whoseTurn = () => {return turnPlayer};
+    
+    return {
+        turnChange,
+        whoseTurn,
+        listener
+    };
+})
+
 const gameBoard = (() => {
     let board = ['', '', '', '', '', '', '', '', ''];
-    const getBoard = () => { return board;}
+
+    const listener = () => {
+        const panels = document.querySelectorAll("div.board-panel");
+        panels.forEach(panel => panel.addEventListener('click', () => console.log(panel)));
+    }
+    
+    const getBoard = () => { 
+        return board;
+    }
+
     const renderBoard = () => {
         const boardElement = document.querySelector("game-board");
         for (let i = 0; i < board.length; i++) {
@@ -9,7 +32,7 @@ const gameBoard = (() => {
             panel.dataset.index = i;
             boardElement.appendChild(panel);
         }
-        console.log(boardElement);
+        listener();
     }
 
     const clearBoard = () => board = ['', '', '', '', '', '', '', '', ''];
@@ -29,18 +52,6 @@ const gameBoard = (() => {
     };
 })();
 
-const gameController = (() => {
-    let turnPlayer;
-    const turnChange = (currentPlayer) => {
-        turnPlayer = currentPlayer;
-    }
-    const whoseTurn = () => {return turnPlayer};
-    return {
-        turnChange,
-        whoseTurn
-    };
-})
-
 const playerFactory = (name) => {
     let score = 0;
     const increaseScore = () => score++;
@@ -56,3 +67,4 @@ const playerFactory = (name) => {
 
 const playerOne = playerFactory('me');
 const playerTwo = playerFactory('you');
+gameBoard.renderBoard();
