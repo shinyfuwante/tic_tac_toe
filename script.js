@@ -1,17 +1,17 @@
 const gameController = (() => {
     const winningSpaces = [[0,1,2], [0,4,8], [0,3,6], [1,4,7], [2, 5,8], [2,4,6], [3, 4,5], [6,7,8]];
-    const players = [];
+    let players = [];
     let turnPlayer;
     const setFirstPlayer = (player) => {
         turnPlayer = player;
     }
     const loadPlayers = (player1, player2) => {
         players.push(player1, player2);
-        setFirstPlayer(player1);
+        setFirstPlayer(players[0]);
     }
 
     const getPlayers = () => {
-        return players;
+        players;
     }
 
     const turnChange = () => {
@@ -48,13 +48,14 @@ const gameController = (() => {
     const panelClick = (e) => {
         const panel = e.target;
         const panelIndex = panel.dataset.index;
-        gameBoard.placeMarker(panelIndex, gameController.getTurnPlayer.getMarker());
-        checkBoardState();
+        if (gameBoard.placeMarker(panelIndex, gameController.getTurnPlayer().marker())) {
+            checkBoardState();
+            gameController.turnChange();
+        }
         listener();
     }
     
     return {
-        setFirstPlayer,
         getTurnPlayer,
         listener,
         loadPlayers,
@@ -66,7 +67,6 @@ const gameBoard = (() => {
     let board = ['', '', '', '', '', '', '', '', ''];
 
     const isEmpty = (index) => {
-        console.log(index);
         return board[index] == '';
     }
 
@@ -87,9 +87,11 @@ const gameBoard = (() => {
 
             const panel = document.querySelector(`[data-index='${panelIndex}']`);
             panel.innerText = playerMark;
-        } else { 
-            alert('The space is occupied!');
-        }
+            return true;
+        } 
+        alert('The space is occupied!');
+        return false;
+
     }
     const clearBoard = () => board = ['', '', '', '', '', '', '', '', ''];
 
@@ -99,6 +101,7 @@ const gameBoard = (() => {
         }
         else return board[index];
     }
+    //todo deal with a full board and tying
     return {
         clearBoard, 
         createBoard,
@@ -108,17 +111,11 @@ const gameBoard = (() => {
 })();
 
 const playerFactory = (name, symbol) => {
-    const marker = symbol;
-    const ign = name; 
-    const getMarker = () => { 
-        return marker;
-    }
-    const getName = () => {
-        return ign;
-    }
+    const marker = () => symbol;
+    const playerName = () => name; 
     return {
-        getMarker,
-        getName
+        marker,
+        playerName
     };
 
 }
