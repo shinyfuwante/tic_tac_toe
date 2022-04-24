@@ -3,25 +3,36 @@ const gameController = (() => {
     const turnChange = (currentPlayer) => {
         turnPlayer = currentPlayer;
     }
-    const whoseTurn = () => {return turnPlayer};
+    const getTurnPlayer = () => {
+        console.log('in getTurnPlayer');
+        return turnPlayer
+    }
+
+    const listener = () => {
+        const panels = document.querySelectorAll("div.board-panel");
+        panels.forEach(panel => panel.addEventListener('click', panelClick));
+    }    
+    
+    const panelClick = (e) => {
+        const panel = e.target;
+        const panelIndex = panel.dataset.index;
+        console.log(panel);
+        console.log(panelIndex);
+    }
+    
     
     return {
         turnChange,
-        whoseTurn,
+        getTurnPlayer,
         listener
     };
-})
+})();
 
 const gameBoard = (() => {
     let board = ['', '', '', '', '', '', '', '', ''];
 
-    const listener = () => {
-        const panels = document.querySelectorAll("div.board-panel");
-        panels.forEach(panel => panel.addEventListener('click', () => console.log(panel)));
-    }
-    
-    const getBoard = () => { 
-        return board;
+    const isEmpty = (index) = () => {
+        return board[index] == '';
     }
 
     const renderBoard = () => {
@@ -32,23 +43,27 @@ const gameBoard = (() => {
             panel.dataset.index = i;
             boardElement.appendChild(panel);
         }
-        listener();
+        gameController.listener();
     }
 
+    const placeMarker = (panelIndex, playerMark) => {
+        if (isEmpty(panelIndex)) {
+            board[index] = playerMark;
+
+            const panel = document.querySelector(`[data-index=${panelIndex}]`);
+            console.log(panel);
+        }
+    }
     const clearBoard = () => board = ['', '', '', '', '', '', '', '', ''];
 
-    const placeMarker = (playerMark, coordinate) => {
-        if (board[coordinate] == '') {
-            board[coordinate] = playerMark;
-            return true;
-        }
-        return false;
+    const getBoard = () => { 
+        return board;
     }
     return {
         clearBoard, 
-        placeMarker,
         renderBoard,
-        getBoard
+        getBoard,
+        placeMarker
     };
 })();
 
