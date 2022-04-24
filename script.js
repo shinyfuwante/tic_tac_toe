@@ -16,8 +16,7 @@ const gameController = (() => {
     const panelClick = (e) => {
         const panel = e.target;
         const panelIndex = panel.dataset.index;
-        console.log(panel);
-        console.log(panelIndex);
+        gameBoard.placeMarker(panelIndex, 'x');
     }
     
     
@@ -31,7 +30,8 @@ const gameController = (() => {
 const gameBoard = (() => {
     let board = ['', '', '', '', '', '', '', '', ''];
 
-    const isEmpty = (index) = () => {
+    const isEmpty = (index) => {
+        console.log(index);
         return board[index] == '';
     }
 
@@ -48,10 +48,10 @@ const gameBoard = (() => {
 
     const placeMarker = (panelIndex, playerMark) => {
         if (isEmpty(panelIndex)) {
-            board[index] = playerMark;
+            board[panelIndex] = playerMark;
 
-            const panel = document.querySelector(`[data-index=${panelIndex}]`);
-            console.log(panel);
+            const panel = document.querySelector(`[data-index='${panelIndex}']`);
+            panel.innerText = playerMark;
         }
     }
     const clearBoard = () => board = ['', '', '', '', '', '', '', '', ''];
