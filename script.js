@@ -19,7 +19,6 @@ const gameController = (() => {
         gameBoard.placeMarker(panelIndex, 'x');
     }
     
-    
     return {
         turnChange,
         getTurnPlayer,
@@ -35,7 +34,7 @@ const gameBoard = (() => {
         return board[index] == '';
     }
 
-    const renderBoard = () => {
+    const createBoard = () => {
         const boardElement = document.querySelector("game-board");
         for (let i = 0; i < board.length; i++) {
             const panel = document.createElement('div');
@@ -52,7 +51,10 @@ const gameBoard = (() => {
 
             const panel = document.querySelector(`[data-index='${panelIndex}']`);
             panel.innerText = playerMark;
+        } else { 
+            alert('The space is occupied!');
         }
+        gameController.listener();
     }
     const clearBoard = () => board = ['', '', '', '', '', '', '', '', ''];
 
@@ -61,7 +63,7 @@ const gameBoard = (() => {
     }
     return {
         clearBoard, 
-        renderBoard,
+        createBoard,
         getBoard,
         placeMarker
     };
@@ -82,4 +84,4 @@ const playerFactory = (name) => {
 
 const playerOne = playerFactory('me');
 const playerTwo = playerFactory('you');
-gameBoard.renderBoard();
+gameBoard.createBoard();
